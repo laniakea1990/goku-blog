@@ -7,11 +7,58 @@ tags:
 
 # Istio 生产案例
 
-## 美国房产交易平台——Trulia
+## 房产交易平台——Trulia
 
 [Microservice Observability with Istio](https://www.trulia.com/blog/tech/microservice-observability-with-istio/)
 
 [Istio和Kubernetes帮助Trulia房产网站消除单体架构增强微服务的可观测性](http://www.servicemesher.com/blog/microservice-observability-with-istio/)
+
+## The Weather Company
+
+### 现状
+
+公司之前名为The Weather Channel，后改名为The Weather Company，2016年被IBM收购。
+
+api.weather.com是该公司的主要服务产品(a platform built to sell and distribute weather data, known as Sun Platform)。有超过40个microservices运行在这个 Sun Platform 上面，每天接受数十亿次调用.
+
+![weather-api-weather-com](/images/istio-production-case/weather-api-weather-com.png)
+
+![weather-api-sun-platform](/images/istio-production-case/weather-api-sun-platform.png)
+
+Sun Platform主要执行7个functions，包括Authentication&Authorization、Routing(核心的)、Monitoring等，目前平台的所有服务都运行在Kubernetes环境中。
+
+![weather-sun-platform-7-functions](/images/istio-production-case/weather-sun-platform-7-functions.png)
+
+### 引入Istio
+
+The Weather Company想要在以下方面做出改进，包括引入自服务路由、熔断机制、重试机制，更好的可视化，以及使Sun Platform对外更透明
+![weather-improvement](/images/istio-production-case/weather-improvement.png)
+
+经过了调研大量的tools之后，公司选中了Istio，主要是看中了istio下面几个优点：
+
+![why istio](/images/istio-production-case/weather-why-istio.png)
+
+起初（istio版本为0.8.0），Sun Platform将7个functions中的Routing和Monitoring与istio进行集成，通过Istio的ServiceEntry将原有的外部service(weather api的实现service)加入到Istio Mesh中
+![service entry](/images/istio-production-case/weather-service-entry.png)
+
+引入Istio后，一个client的请求流程如下图：
+
+![weather-client-request](/images/istio-production-case/weather-client-request.png)
+
+另外，借助Istio集群自带的Prometheus、Grafana，以及Netflix的Vistio增强了Sun Platform的可视化程度。
+![weather-vistio-prometheus-grafana](/images/istio-production-case/weather-vistio-prometheus-grafana.png)
+
+截止Istio版本0.8.0，The Weather Company使用Istio已经八个多月了，api.weather.com还没有在生产环境部署，目前生产环境只有部分APIs使用了istio
+![weather-where-we-are-today](/images/istio-production-case/weather-where-we-are-today.png)
+
+The Weather Company没有一次性将自己所有的API都使用istio，而是循序渐进的进行，基于以下的考虑:
+
+![weather-using-istio](/images/istio-production-case/weather-using-istio.png)
+
+### 参考
+
+[Istio - The Weather Company's Journey - Nick Nellis & Fabio Oliveira, IBM (Any Skill Level)
+](https://www.youtube.com/watch?v=0fKi3NeCsSE)
 
 ## HR SaaS(人力资源系统)——Namely
 
