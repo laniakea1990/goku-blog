@@ -1,1 +1,1 @@
-# goku-blog
+# jrr-hexo-blog
