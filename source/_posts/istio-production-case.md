@@ -20,6 +20,7 @@ tags:
 公司之前名为The Weather Channel，后改名为The Weather Company，2016年被IBM收购。
 
 api.weather.com是该公司的主要服务产品(a platform built to sell and distribute weather data, known as Sun Platform)。有超过40个microservices运行在这个 Sun Platform 上面，每天接受数十亿次调用.
+<!--more-->
 
 ![weather-api-weather-com](/images/istio-production-case/weather-api-weather-com.png)
 
