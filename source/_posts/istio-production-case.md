@@ -7,20 +7,69 @@ tags:
 
 # Istio 生产案例
 
-## 房产交易平台——Trulia
+## Trulia——房产交易平台
+
+### 引言
+
+Trulia之前将公司网站 [www.trulia.com](www.trulia.com) 这个单体应用分解成面向服务（SOA）的架构。许多遗留AWS服务都是通过AMI映像promotion进行部署的，并使用各种不同的方法实现可观测性(Observability)。将测量工具添加到代码库和基础架构所需的手动操作一直是Trulia面对的传统痛点。
+
+在2017年，Trulia 决定在 kubernetes 上构建所有的微服务，希望标准化微服务的指标、监控、流控等技术。Trulia 为了构建这样一个平台(将基本可观测性问题与构建微服务的用户分开，允许在使用该平台的所有微服务之间实现连接和可观察性的独立和共享创新)，选择的技术是容器和 kubernetes 的补充 istio。
+<!--more-->
+
+### Istio的引入
+
+Trulia 使用 Istio 透明代理 Kubernetes 工作负载中的所有通信。将所有遥测集合移出进程，将其与单个微服务的代码库分离。
+
+![trulia-istio](/images/istio-production-case/trulia-istio.jpg)
+
+下图中展示的是Prometheus中收集的指标，用于报警和Grafana绘图。Envoy 被注入到每个工作负载中，并采集有关请求率、延迟和响应代码等信息。
+
+![trulia-envoy](/images/istio-production-case/trulia-envoy.jpg)
+
+在kubernetes和istio的帮助下，Trulia 能够分解单体架构替换成可持续交付的微服务架构。团队不再被迫手动将工具添加到单个代码库或基础架构自动化中。Trulia工程师能够部署具有开箱即用的可观测性和单一指标来源的新的微服务。
+
+### 参考
 
 [Microservice Observability with Istio](https://www.trulia.com/blog/tech/microservice-observability-with-istio/)
 
 [Istio和Kubernetes帮助Trulia房产网站消除单体架构增强微服务的可观测性](http://www.servicemesher.com/blog/microservice-observability-with-istio/)
 
-## The Weather Company
+## Descartes Labs(笛卡尔实验室)——为农业分析卫星遥感数据的初创公司
+
+### 背景
+
+Descartes Labs 是一家通过分析卫星遥感数据为农业等相关行业提供数据服务的公司，公司有50多个microservice运行在GKE(Google Kubernetes Engine)平台上，卫星遥感数据存储在GCS(Google Cloud Storage)，其运行架构如下：
+![Descartes-Labs-Core-API's-Pre-Istio](/images/istio-production-case/Descartes-Labs-Core-API's-Pre-Istio.png)
+
+### 问题及Istio的引入
+
+在扩展microservices时，Descartes Labs遇到了下面这几个问题：
+
+- Visibility(Isito can give instant visibility into each service,which services are calling that specific service)
+- Understanding of what behaviors
+- Quickly identify issues
+
+![Descartes-Labs-Problems-1](/images/istio-production-case/Descartes-Labs-Problems-1.png)
+![Descartes-Labs-Problems-2](/images/istio-production-case/Descartes-Labs-Problems-2.png)
+![Descartes-Labs-Problems-3](/images/istio-production-case/Descartes-Labs-Problems-3.png)
+
+引入 Istio 之后，其运行架构如下，在 K8s control plane 和应用之间增加了一层 Istio control plane, 并在每一个 service 的运行 pod 中 inject envoy。
+
+![Descartes-Core-APIs-With-Istio](/images/istio-production-case/Descartes-Core-APIs-With-Istio.png)
+
+### 参考
+
+[SRE Quality Operations for Your Services Using the Istio Service Mesh & Stackdriver](https://www.youtube.com/watch?v=u1TQeeZN05Y)
+
+[Building Multi-Tenancy ML Applications with GKE and Istio](https://www.youtube.com/watch?v=OVcFIOs5bz0)
+
+## The Weather Company——天气资讯服务公司
 
 ### 现状
 
 公司之前名为The Weather Channel，后改名为The Weather Company，2016年被IBM收购。
 
 api.weather.com是该公司的主要服务产品(a platform built to sell and distribute weather data, known as Sun Platform)。有超过40个microservices运行在这个 Sun Platform 上面，每天接受数十亿次调用.
-<!--more-->
 
 ![weather-api-weather-com](/images/istio-production-case/weather-api-weather-com.png)
 
@@ -61,7 +110,7 @@ The Weather Company没有一次性将自己所有的API都使用istio，而是
 [Istio - The Weather Company's Journey - Nick Nellis & Fabio Oliveira, IBM (Any Skill Level)
 ](https://www.youtube.com/watch?v=0fKi3NeCsSE)
 
-## HR SaaS(人力资源系统)——Namely
+## Namely——HR SaaS(人力资源系统)
 
 [Livestream : Services at Namely (Istio, Spinnaker, +) and some Machine Learning (Kubeflow)](https://www.youtube.com/watch?v=iga5peu4E88)
 
@@ -79,7 +128,7 @@ The Weather Company没有一次性将自己所有的API都使用istio，而是
 
 [Istio 1.0: Come for Traffic Routing, Stay for Distributed Tracing](https://www.pubnub.com/company/news-coverage/2018/istio-1-0-come-for-traffic-routing-stay-for-distributed-tracing/)
 
-## 蚂蚁金服、阿里大文娱UC事业部——SOFA Mesh
+## SOFA Mesh——蚂蚁金服、阿里大文娱UC事业部推出
 
 SOFAMesh 是基于 Istio 改进和扩展而来的 Service Mesh 大规模落地实践方案。在继承 Istio 强大功能和丰富特性的基础上，为满足大规模部署下的性能要求以及应对落地实践中的实际情况，有如下改进：
 
