@@ -20,11 +20,11 @@ Trulia之前将公司网站 [www.trulia.com](www.trulia.com) 这个单体应用�
 
 Trulia 使用 Istio 透明代理 Kubernetes 工作负载中的所有通信。将所有遥测集合移出进程，将其与单个微服务的代码库分离。
 
-![trulia-istio](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/trulia-istio.jpg)
+![trulia-istio](/images/istio-production-case/trulia-istio.jpg)
 
 下图中展示的是Prometheus中收集的指标，用于报警和Grafana绘图。Envoy 被注入到每个工作负载中，并采集有关请求率、延迟和响应代码等信息。
 
-![trulia-envoy](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/trulia-envoy.jpg)
+![trulia-envoy](/images/istio-production-case/trulia-envoy.jpg)
 
 在kubernetes和istio的帮助下，Trulia 能够分解单体架构替换成可持续交付的微服务架构。团队不再被迫手动将工具添加到单个代码库或基础架构自动化中。Trulia工程师能够部署具有开箱即用的可观测性和单一指标来源的新的微服务。
 
@@ -39,7 +39,7 @@ Trulia 使用 Istio 透明代理 Kubernetes 工作负载中的所有通信。将
 ### 背景
 
 Descartes Labs 是一家通过分析卫星遥感数据为农业等相关行业提供数据服务的公司，公司有50多个microservice运行在GKE(Google Kubernetes Engine)平台上，卫星遥感数据存储在GCS(Google Cloud Storage)，其运行架构如下：
-![Descartes-Labs-Core-API's-Pre-Istio](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/Descartes-Labs-Core-API's-Pre-Istio.png)
+![Descartes-Labs-Core-API's-Pre-Istio](/images/istio-production-case/Descartes-Labs-Core-API's-Pre-Istio.png)
 
 ### 问题及Istio的引入
 
@@ -49,13 +49,13 @@ Descartes Labs 是一家通过分析卫星遥感数据为农业等相关行业�
 - Understanding of what behaviors
 - Quickly identify issues
 
-![Descartes-Labs-Problems-1](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/Descartes-Labs-Problems-1.png)
-![Descartes-Labs-Problems-2](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/Descartes-Labs-Problems-2.png)
-![Descartes-Labs-Problems-3](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/Descartes-Labs-Problems-3.png)
+![Descartes-Labs-Problems-1](/images/istio-production-case/Descartes-Labs-Problems-1.png)
+![Descartes-Labs-Problems-2](/images/istio-production-case/Descartes-Labs-Problems-2.png)
+![Descartes-Labs-Problems-3](/images/istio-production-case/Descartes-Labs-Problems-3.png)
 
 引入 Istio 之后，其运行架构如下，在 K8s control plane 和应用之间增加了一层 Istio control plane, 并在每一个 service 的运行 pod 中 inject envoy。
 
-![Descartes-Core-APIs-With-Istio](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/Descartes-Core-APIs-With-Istio.png)
+![Descartes-Core-APIs-With-Istio](/images/istio-production-case/Descartes-Core-APIs-With-Istio.png)
 
 ### 参考
 
@@ -71,39 +71,39 @@ Descartes Labs 是一家通过分析卫星遥感数据为农业等相关行业�
 
 api.weather.com是该公司的主要服务产品(a platform built to sell and distribute weather data, known as Sun Platform)。有超过40个microservices运行在这个 Sun Platform 上面，每天接受数十亿次调用.
 
-![weather-api-weather-com](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-api-weather-com.png)
+![weather-api-weather-com](/images/istio-production-case/weather-api-weather-com.png)
 
-![weather-api-sun-platform](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-api-sun-platform.png)
+![weather-api-sun-platform](/images/istio-production-case/weather-api-sun-platform.png)
 
 Sun Platform主要执行7个functions，包括Authentication&Authorization、Routing(核心的)、Monitoring等，目前平台的所有服务都运行在Kubernetes环境中。
 
-![weather-sun-platform-7-functions](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-sun-platform-7-functions.png)
+![weather-sun-platform-7-functions](/images/istio-production-case/weather-sun-platform-7-functions.png)
 
 ### 引入Istio
 
 The Weather Company想要在以下方面做出改进，包括引入自服务路由、熔断机制、重试机制，更好的可视化，以及使Sun Platform对外更透明
-![weather-improvement](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-improvement.png)
+![weather-improvement](/images/istio-production-case/weather-improvement.png)
 
 经过了调研大量的tools之后，公司选中了Istio，主要是看中了istio下面几个优点：
 
-![why istio](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-why-istio.png)
+![why istio](/images/istio-production-case/weather-why-istio.png)
 
 起初（istio版本为0.8.0），Sun Platform将7个functions中的Routing和Monitoring与istio进行集成，通过Istio的ServiceEntry将原有的外部service(weather api的实现service)加入到Istio Mesh中
-![service entry](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-service-entry.png)
+![service entry](/images/istio-production-case/weather-service-entry.png)
 
 引入Istio后，一个client的请求流程如下图：
 
-![weather-client-request](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-client-request.png)
+![weather-client-request](/images/istio-production-case/weather-client-request.png)
 
 另外，借助Istio集群自带的Prometheus、Grafana，以及Netflix的Vistio增强了Sun Platform的可视化程度。
-![weather-vistio-prometheus-grafana](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-vistio-prometheus-grafana.png)
+![weather-vistio-prometheus-grafana](/images/istio-production-case/weather-vistio-prometheus-grafana.png)
 
 截止Istio版本0.8.0，The Weather Company使用Istio已经八个多月了，api.weather.com还没有在生产环境部署，目前生产环境只有部分APIs使用了istio
-![weather-where-we-are-today](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-where-we-are-today.png)
+![weather-where-we-are-today](/images/istio-production-case/weather-where-we-are-today.png)
 
 The Weather Company没有一次性将自己所有的API都使用istio，而是循序渐进的进行，基于以下的考虑:
 
-![weather-using-istio](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/weather-using-istio.png)
+![weather-using-istio](/images/istio-production-case/weather-using-istio.png)
 
 ### 参考
 
@@ -141,7 +141,7 @@ SOFAMesh 是基于 Istio 改进和扩展而来的 Service Mesh 大规模落地�
 
 ### Golang版Sidecar——MOSN
 
-![golang sidecar - MOSN](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/golang-sidecar.png)
+![golang sidecar - MOSN](/images/istio-production-case/golang-sidecar.png)
 
 Golang版本Sidecar参考了Envoy，非常明确的实现XDS API。因为XDS API是目前的事实标准，实现XDS API使其让兼容Istio。
 
@@ -149,7 +149,7 @@ Golang版本Sidecar参考了Envoy，非常明确的实现XDS API。因为XDS API
 
 ### Mixer部分功能被合并至数据平面
 
-![mixer merge](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/mixer-merge.png)
+![mixer merge](/images/istio-production-case/mixer-merge.png)
 
 最大的变化在Mixer，其实刚才的goland版 sidecar虽然是全新编写，但是说白了是对Envoy的替换，在架构上没有什么变化。但这一步的变化就非常大，我们会合并一部分的Mixer功能。
 
@@ -165,7 +165,7 @@ Mixer的三大功能：
 
 ### 增强版Pilot
 
-![enhanced pilot](https://github.com/laniakea1990/laniakea1990.github.io/blob/master/images/istio-production-case/pilot-enhance.png)
+![enhanced pilot](/images/istio-production-case/pilot-enhance.png)
 
 SOFA Mesh大幅扩展和增强Istio中的Pilot模块:
 
